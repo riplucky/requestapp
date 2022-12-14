@@ -1,9 +1,0 @@
-Screen3 As screen:
-
-    Button6 As button:
-        OnSelect: =Navigate(Screen1);
-        Text: ="Button"
-        X: =528
-        Y: =320
-        ZIndex: =1
-
