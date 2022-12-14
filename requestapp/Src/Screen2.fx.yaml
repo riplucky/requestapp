@@ -1,0 +1,408 @@
+Screen2 As screen:
+    OnVisible: |
+        =Reset(Gallery1);
+        
+        Set(requestItemTitle, First(requestItem).name);
+        Set(typeId, First(requestItem).typeId);
+        ClearCollect(approveRoute, Filter('request-type',ID = Value(typeId)));
+        Set(approveId, First(approveRoute).approveRouteId);
+        ClearCollect(approveStep, Filter('approve-step', approveRouteId = approveId));
+        
+        Set(appstepid, First(SortByColumns(approveStep,"orderBy",Ascending)).ID);
+        
+        ClearCollect(
+            ReqAppStepPerson,
+            Filter(
+                'request-app-personal',
+                requestid = Value(First(requestItem).ID) && stepid = appstepid
+            )
+        );
+        ClearCollect(
+            ApprovePerson,
+            Filter(
+                'approve-person',
+                stepid = appstepid
+            )
+        );
+        ClearCollect(
+            AppStepPerson,
+            Blank()
+        );
+        ForAll(
+            ApprovePerson,
+            If(
+                !(email exactin ReqAppStepPerson.email),
+                Collect(
+                    AppStepPerson,
+                    {appEmail: email}
+                )
+            )
+        );
+
+    Label2 As label:
+        FontWeight: =FontWeight.Bold
+        Height: =50
+        Size: =20
+        Text: =requestItemTitle
+        Width: =404
+        X: =38
+        Y: =10
+        ZIndex: =1
+
+    "Gallery1 As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+        BorderThickness: =1
+        Height: =687
+        Items: =approveStep
+        Layout: =Layout.Vertical
+        OnSelect: |
+            =Set(
+                appstepid,
+                Value(ThisItem.ID)
+            );
+            ClearCollect(
+                ReqAppStepPerson,
+                Filter(
+                    'request-app-personal',
+                    requestid = Value(First(requestItem).ID) && stepid = appstepid
+                )
+            );
+            ClearCollect(
+                ApprovePerson,
+                Filter(
+                    'approve-person',
+                    stepid = appstepid
+                )
+            );
+            ClearCollect(
+                AppStepPerson,
+                Blank()
+            );
+            ForAll(
+                ApprovePerson,
+                If(
+                    !(email exactin ReqAppStepPerson.email),
+                    Collect(
+                        AppStepPerson,
+                        {appEmail: email}
+                    )
+                )
+            );
+        TemplateFill: =If(ThisItem.IsSelected,RGBA(51,51,51,0.3),RGBA(255,255,255,1))
+        TemplatePadding: =0
+        TemplateSize: =192
+        Width: =901
+        X: =38
+        Y: =60
+        ZIndex: =1
+
+        "Gallery2 As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+            BorderThickness: =1
+            Height: =152
+            Items: =Filter('request-app-personal', requestid = Value(First(requestItem).ID) && stepid = Value(ThisItem.ID))
+            Layout: =Layout.Vertical
+            TemplatePadding: =0
+            TemplateSize: =44
+            Width: =346
+            X: =367
+            Y: =22
+            ZIndex: =1
+
+            Title4 As label:
+                Height: =Self.Size * 1.8
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =15
+                Text: =ThisItem.email
+                VerticalAlign: =VerticalAlign.Top
+                Width: =Parent.TemplateWidth - 104
+                X: =32
+                Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            NextArrow4 As icon.ChevronRight:
+                AccessibleLabel: =Self.Tooltip
+                Height: =60
+                Icon: =Icon.ChevronRight
+                OnSelect: |
+                    =RemoveIf(
+                        'request-app-personal',
+                        email = ThisItem.email && requestid = Value(First(requestItem).ID) && stepid = Value(Gallery1.Selected.ID)
+                    );
+                    Refresh('request-app-personal');
+                    ClearCollect(
+                        ReqAppStepPerson,
+                        Filter(
+                            'request-app-personal',
+                            requestid = Value(First(requestItem).ID) && stepid = appstepid
+                        )
+                    );
+                    ClearCollect(
+                        ApprovePerson,
+                        Filter('approve-person',stepid = appstepid)
+                    );
+                    ClearCollect(
+                        AppStepPerson,
+                        Blank()
+                    );
+                    ForAll(
+                        ApprovePerson,
+                        If(
+                            !(email exactin ReqAppStepPerson.email),
+                            Collect(
+                                AppStepPerson,
+                                {appEmail: email}
+                            )
+                        )
+                    );
+                PaddingBottom: =10
+                PaddingLeft: =10
+                PaddingRight: =10
+                PaddingTop: =10
+                TabIndex: =0
+                Tooltip: ="View item details"
+                Width: =60
+                X: =Parent.TemplateWidth - Self.Width - 5
+                Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+                ZIndex: =2
+
+            Separator4 As rectangle:
+                Height: =1
+                OnSelect: =Select(Parent)
+                Width: =Parent.TemplateWidth
+                Y: =Parent.TemplateHeight - 1
+                ZIndex: =3
+
+        Title2 As label:
+            Height: =52
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =139
+            X: =16
+            Y: =72
+            ZIndex: =1
+
+        Separator2 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =4
+
+        Title2_1 As label:
+            BorderThickness: =1
+            Height: =63
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =First(Filter('approve-method',ID = Value(First(Filter(approveStep,ID = Value(ThisItem.ID))).approveMethodId))).name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =185
+            X: =142
+            Y: =61
+            ZIndex: =5
+
+        Button2 As button:
+            Height: =46
+            OnSelect: |
+                =Set(appstepid, Value(ThisItem.ID));
+                ClearCollect(
+                    ApprovePerson,
+                    Filter(
+                        'approve-person',
+                        stepid = appstepid
+                    )
+                );
+                
+                RemoveIf(
+                    'request-app-personal',
+                    requestid = Value(First(requestItem).ID) && stepid = Value(Gallery1.Selected.ID)
+                );
+                Refresh('request-app-personal');
+                ClearCollect(
+                    ReqAppStepPerson,
+                    Filter(
+                        'request-app-personal',
+                        requestid = Value(First(requestItem).ID) && stepid = appstepid
+                    )
+                );
+                ClearCollect(
+                    ApprovePerson,
+                    Filter('approve-person',stepid = appstepid)
+                );
+                ClearCollect(
+                    AppStepPerson,
+                    Blank()
+                );
+                ForAll(
+                    ApprovePerson,
+                    If(
+                        !(email exactin ReqAppStepPerson.email),
+                        Collect(
+                            AppStepPerson,
+                            {appEmail: email}
+                        )
+                    )
+                );
+            Text: ="Remove All"
+            Width: =136
+            X: =739
+            Y: =69
+            ZIndex: =6
+
+    "Gallery3 As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+        BorderThickness: =1
+        Height: =442
+        Items: |-
+            =Filter(
+                AppStepPerson,
+                TextInput1.Text in appEmail
+            )
+        Layout: =Layout.Vertical
+        TemplatePadding: =0
+        TemplateSize: =Min(96, Self.Height - 60)
+        Width: =391
+        X: =970
+        Y: =136
+        ZIndex: =1
+
+        Title6 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.appEmail
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 104
+            X: =60
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =1
+
+        NextArrow6 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            Height: =60
+            Icon: =Icon.ChevronLeft
+            OnSelect: |+
+                =Patch(
+                    'request-app-personal',
+                    {
+                        stepid: Value(Gallery1.Selected.ID),
+                        email:ThisItem.appEmail,
+                        requestid: Value(First(requestItem).ID)
+                    }
+                );
+                Refresh('request-app-personal');
+                ClearCollect(
+                    ReqAppStepPerson,
+                    Filter(
+                        'request-app-personal',
+                        requestid = Value(First(requestItem).ID) && stepid = appstepid
+                    )
+                );
+                ClearCollect(
+                    ApprovePerson,
+                    Filter('approve-person',stepid = appstepid)
+                );
+                ClearCollect(
+                    AppStepPerson,
+                    Blank()
+                );
+                ForAll(
+                    ApprovePerson,
+                    If(
+                        !(email exactin ReqAppStepPerson.email),
+                        Collect(
+                            AppStepPerson,
+                            {appEmail: email}
+                        )
+                    )
+                );
+                
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            TabIndex: =0
+            Tooltip: ="View item details"
+            Width: =60
+            Y: =18
+            ZIndex: =2
+
+        Separator6 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =3
+
+    Button4 As button:
+        OnSelect: |
+            =ForAll(
+                AppStepPerson,
+                Patch(
+                    'request-app-personal',
+                    {
+                        stepid: Value(Gallery1.Selected.ID),
+                        email: appEmail,
+                        requestid: Value(First(requestItem).ID)
+                    }
+                )
+            );
+            Refresh('request-app-personal');
+            ClearCollect(
+                ReqAppStepPerson,
+                Filter(
+                    'request-app-personal',
+                    requestid = Value(First(requestItem).ID) && stepid = appstepid
+                )
+            );
+            ClearCollect(
+                ApprovePerson,
+                Filter('approve-person',stepid = appstepid)
+            );
+            ClearCollect(
+                AppStepPerson,
+                Blank()
+            );
+            ForAll(
+                ApprovePerson,
+                If(
+                    !(email exactin ReqAppStepPerson.email),
+                    Collect(
+                        AppStepPerson,
+                        {appEmail: email}
+                    )
+                )
+            );
+        Text: ="Add All"
+        X: =1199
+        Y: =724
+        ZIndex: =2
+
+    Button5 As button:
+        OnSelect: =Navigate(Screen3)
+        Text: ="Back"
+        X: =1199
+        Y: =7
+        ZIndex: =3
+
+    TextInput1 As text:
+        Default: ="Text input"
+        Height: =36
+        OnChange: =//ClearCollect(ApprovePersonSearch,(Filter(AppStepPerson,StartsWith(appEmail,TextInput1.Text))))
+        Width: =391
+        X: =968
+        Y: =91
+        ZIndex: =4
+
