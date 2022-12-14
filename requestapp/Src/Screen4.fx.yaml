@@ -1,0 +1,180 @@
+Screen4 As screen:
+    OnVisible: |
+        =// Get all O365 User => return only 999 otherwise put top is 7000
+        ClearCollect(o365user, Office365Users.SearchUserV2({searchTerm:"", isSearchTermRequired:false, top:7000}).value);
+        // Get O365 User that filter by department or tile => the SearchUserV2 cannot search user by department or title
+        ClearCollect(userbydeparment, Office365Users.SearchUserV2({searchTerm:"Accountant", isSearchTermRequired:true}).value);
+
+    "Gallery5 As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+        BorderThickness: =1
+        Height: =618
+        Items: =o365user
+        Layout: =Layout.Vertical
+        TemplatePadding: =0
+        TemplateSize: =Min(104, Self.Height - 60)
+        Width: =464
+        X: =36
+        Y: =53
+        ZIndex: =1
+
+        Title8 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.DisplayName
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 104
+            X: =32
+            Y: =16
+            ZIndex: =1
+
+        Subtitle3 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.UserPrincipalName
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 104
+            X: =32
+            Y: =Title8.Y + Title8.Height + 4
+            ZIndex: =2
+
+        NextArrow7 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            Height: =60
+            Icon: =Icon.ChevronRight
+            OnSelect: =Select(Parent)
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            TabIndex: =0
+            Tooltip: ="View item details"
+            Width: =60
+            X: =Parent.TemplateWidth - Self.Width - 5
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =3
+
+        Separator8 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =4
+
+    Label6 As label:
+        Align: =Align.Center
+        FontWeight: =FontWeight.Bold
+        Height: =72
+        Size: =20
+        Text: =Concatenate("Number of Result - ",CountRows(o365user.UserPrincipalName))
+        Width: =464
+        X: =36
+        Y: =671
+        ZIndex: =2
+
+    Label7 As label:
+        FontWeight: =FontWeight.Bold
+        Size: =20
+        Text: ="Get all user without filter"
+        Width: =425
+        X: =36
+        Y: =13
+        ZIndex: =3
+
+    "Gallery5_1 As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+        BorderThickness: =1
+        Height: =618
+        Items: =userbydeparment
+        Layout: =Layout.Vertical
+        TemplatePadding: =0
+        TemplateSize: =Min(104, Self.Height - 60)
+        Width: =464
+        X: =715
+        Y: =53
+        ZIndex: =4
+
+        Title8_1 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.DisplayName
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 104
+            X: =32
+            Y: =16
+            ZIndex: =1
+
+        Subtitle3_1 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.UserPrincipalName
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 104
+            X: =32
+            Y: =Title8_1.Y + Title8_1.Height + 4
+            ZIndex: =2
+
+        NextArrow7_1 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            Height: =60
+            Icon: =Icon.ChevronRight
+            OnSelect: =Select(Parent)
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            TabIndex: =0
+            Tooltip: ="View item details"
+            Width: =60
+            X: =Parent.TemplateWidth - Self.Width - 5
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =3
+
+        Separator8_1 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =4
+
+    Label6_1 As label:
+        Align: =Align.Center
+        FontWeight: =FontWeight.Bold
+        Height: =72
+        Size: =20
+        Text: =Concatenate("Number of Result - ",CountRows(userbydeparment.UserPrincipalName))
+        Width: =464
+        X: =715
+        Y: =671
+        ZIndex: =5
+
+    Label7_1 As label:
+        FontWeight: =FontWeight.Bold
+        Height: =51
+        Size: =20
+        Text: ="Get all user filter by department"
+        Width: =516
+        X: =715
+        Y: =2
+        ZIndex: =6
+
+    Label8 As label:
+        Text: =Office365Users.UserProfileV2("user-7000@anhkimbaker.onmicrosoft.com").department
+        X: =532
+        Y: =240
+        ZIndex: =7
+
