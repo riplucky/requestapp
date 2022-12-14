@@ -1,0 +1,174 @@
+Screen1 As screen:
+    Fill: =
+
+    Camera1 As camera:
+        BorderThickness: =1
+        Camera: =0
+        X: =132
+        Y: =23
+        ZIndex: =1
+
+    Button1 As button:
+        Height: =70
+        OnSelect: |
+            =Set(
+                longitude,
+                Text(Location.Longitude)
+            );
+            Set(
+                latitude,
+                Text(Location.Latitude)
+            );
+            Set(
+                localVar,
+                Concatenate(
+                    longitude,
+                    "-",
+                    latitude
+                )
+            );
+            Set(
+                timeIn,
+                Text(
+                    DateTimeValue(
+                        Now(),
+                        "vi-VN"
+                    )
+                )
+            );
+            Set(
+                inLate,
+                DateDiff(
+                    timeInDefault,
+                    Now(),
+                    Minutes
+                )
+            );
+            Set(
+                inLateText,
+                Text(
+                    Concatenate(
+                        RoundDown(
+                            Value(inLate) / 60,
+                            0
+                        ),
+                        "h, ",
+                        Mod(
+                            Value(inLate),
+                            60
+                        ),
+                        "m"
+                    )
+                )
+            );
+            Set(
+                dateCheckin,
+                Text(
+                    DateValue(
+                        Now(),
+                        "vi-VN"
+                    )
+                )
+            );
+            Collect(
+                empCheckIn,
+                {
+                    email: User().Email,
+                    checkIn: Text(timeIn),
+                    inLate: Text(inLate),
+                    dateCheckIn: Text(dateCheckin),
+                    lat: Text(latitude),
+                    long: Text(longitude)
+                }
+            );
+        Size: =24
+        Text: ="Check out"
+        Width: =280
+        X: =192
+        Y: =338
+        ZIndex: =2
+
+    locationCheckin As text:
+        Default: =localVar
+        Height: =70
+        Size: =21
+        Width: =560
+        X: =52
+        Y: =447
+        ZIndex: =4
+
+    Label2_2 As label:
+        Height: =70
+        Size: =21
+        Text: =timeIn
+        Width: =560
+        X: =52
+        Y: =517
+        ZIndex: =7
+
+    Label2_4 As label:
+        Height: =70
+        Size: =21
+        Text: =Concatenate(Text(inLate)," phút")
+        Width: =156
+        X: =52
+        Y: =567
+        ZIndex: =9
+
+    Label2_5 As label:
+        Height: =70
+        Size: =21
+        Text: =Text(DateTimeValue(timeInDefault,"vi-VN"))
+        Width: =284
+        X: =327
+        Y: =519
+        ZIndex: =10
+
+    Label2_6 As label:
+        Height: =70
+        Size: =21
+        Text: =inLateText
+        Width: =560
+        X: =52
+        Y: =720
+        ZIndex: =11
+
+    Image1 As image:
+        Height: =422
+        Image: |-
+            =BingMaps.GetMap(
+                "RoadOnDemand",
+                zoomNumber,
+                10.765827,
+                106.645757,
+                {pushpin: Concatenate(10.765827 & "," & 106.645757),mapSize:"1000,700"}
+            )
+        ImagePosition: =ImagePosition.Fill
+        RadiusBottomLeft: =100
+        RadiusBottomRight: =100
+        RadiusTopLeft: =100
+        RadiusTopRight: =100
+        Width: =560
+        X: =52
+        Y: =616
+        ZIndex: =12
+
+    Slider1 As slider:
+        Default: =15
+        Height: =70
+        Max: =21
+        OnChange: =Set(zoomNumber, Slider1.Value)
+        Width: =560
+        X: =51
+        Y: =1038
+        ZIndex: =13
+
+    Label2_7 As label:
+        Height: =70
+        Size: =21
+        Text: =inLateText
+        Width: =156
+        X: =222
+        Y: =567
+        ZIndex: =14
+

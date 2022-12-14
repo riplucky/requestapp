@@ -1,0 +1,85 @@
+{
+  "70215559-b02c-401e-8174-28109d7d907e": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "displayName": "Office 365 Users",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1611/1.0.1611.3104/office365users/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_office365users"
+    },
+    "datasets": {},
+    "dataSources": [
+      "Office365Users"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "70215559-b02c-401e-8174-28109d7d907e"
+  },
+  "9bf5fb6b-a9fe-4877-93f5-01d51b8538d2": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Bing Maps",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1567/1.0.1567.2748/bingmaps/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_bingmaps",
+      "parameterHints": {},
+      "parameterHintsV2": {},
+      "sharedConnectionId": "/providers/microsoft.powerapps/apis/shared_bingmaps/connections/09126f16435648d6a3a07e2962c2bedb",
+      "xrmConnectionReferenceLogicalName": "cr9b2_sharedbingmaps_5c3ba"
+    },
+    "datasets": {},
+    "dataSources": [
+      "BingMaps"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "9bf5fb6b-a9fe-4877-93f5-01d51b8538d2"
+  },
+  "df5f4244-7ff2-4bbd-b8d9-1aa954a4d408": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "SharePoint",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1610-greyhound-localization-RelayFix/1.0.1610.3091/sharepointonline/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_sharepointonline",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {
+      "https://anhkimbaker.sharepoint.com/sites/BeoBanhBao-App": {
+        "dataSources": {
+          "empCheckIn": {
+            "tableName": "5b3c8524-5d3e-460b-8273-69d6732be89a"
+          }
+        }
+      },
+      "https://anhkimbaker.sharepoint.com/sites/PowerPlatformDemo": {
+        "dataSources": {
+          "approve-person": {
+            "tableName": "723d1655-11e7-497e-ac84-4e2304787c0b"
+          },
+          "request-app-personal": {
+            "tableName": "65594c75-9b32-4c69-8b41-5692bd27291d"
+          },
+          "user-list": {
+            "tableName": "b6ded430-0604-4933-bf01-bd014c3c2af1"
+          }
+        }
+      }
+    },
+    "dataSources": [
+      "empCheckIn",
+      "user-list",
+      "approve-person",
+      "request-app-personal"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "df5f4244-7ff2-4bbd-b8d9-1aa954a4d408"
+  }
+}
